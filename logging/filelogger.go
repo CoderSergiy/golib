@@ -36,8 +36,9 @@ const (
  *
 *****************************************************************************************/
 type Log struct {
-	fileName string
-	fileSize int64
+	fileName 				string
+	fileSize				int64
+	duplicateOnTerminal		bool
 }
 
 /****************************************************************************************
@@ -48,11 +49,13 @@ type Log struct {
  *
  *	Return : Log object
 */
-func LogConstructor (fileName string, fileSize ...int64) Log {
+func LogConstructor (fileName string, outputDuplicateFlag bool, fileSize ...int64) Log {
 	log := Log{}
 	log.fileName = fileName
 	// Set default fileSize
 	log.fileSize = LOG_FILE_SIZE
+
+	log.duplicateOnTerminal = outputDuplicateFlag
 
 	if len(fileSize) > 0 {
 		// Set filesize from constructor the parameter
@@ -141,6 +144,10 @@ func (log *Log) createLog(messageInput string, messageType Message_Type) {
 	if fp != nil {
 		fmt.Fprintf(fp, "%s\n", messageInput)
     	fp.Close()
+	}
+
+	if log.duplicateOnTerminal {
+		fmt.Println(messageInput)
 	}
 
 	//Check logfile for rotaton

@@ -16,24 +16,29 @@ import (
 */
 func TestLogStruct (t *testing.T ) {
 
-	log := LogConstructor("/tmp/logs")
+	log := LogConstructor("/tmp/logs", false)
 
 	// Set max log file size by default
 	if log.fileSize != 5000000 {
 		t.Error (fmt.Printf("Wrong maxFileSize : '%v'", log.fileSize))
-		return
+	} else {
+		t.Log(fmt.Printf("maxFileSize is correct '%v'", log.fileSize))
 	}
 
-	t.Log(fmt.Printf("maxFileSize is correct '%v'", log.fileSize))
+	duplicateOnTerminal := true
+	log1 := LogConstructor("/tmp/logs", duplicateOnTerminal, 125000)
 
-
-	log1 := LogConstructor("/tmp/logs", 125000)
-
-	// Set max log file size by default
+	// Check if max log filesize is not set by default and equal to set size in constructor
 	if log1.fileSize != 125000 {
 		t.Error (fmt.Printf("Wrong maxFileSize : '%v'", log1.fileSize))
-		return
+	} else {
+		t.Log(fmt.Printf("maxFileSize is correct '%v'", log1.fileSize))
 	}
 
-	t.Log(fmt.Printf("maxFileSize is correct '%v'", log1.fileSize))
+	// Check if flag set correctly in constructor
+	if log1.duplicateOnTerminal == duplicateOnTerminal {
+		t.Log(fmt.Printf("duplicateOnTerminal flag is set correctly: '%v'", duplicateOnTerminal))
+	} else {
+		t.Error (fmt.Printf("Wrong duplicateOnTerminal flag: '%v'", duplicateOnTerminal))
+	}
 }
