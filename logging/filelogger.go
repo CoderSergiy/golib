@@ -137,7 +137,7 @@ func (log *Log) createLog(messageInput string, messageType Message_Type) {
 	messageInput = time.Now().Format("2006-01-02 15:04:05.000") + " [" + string(messageType) + "] " + messageInput
 
 	// Send line to the file
-	fp := OpenCreateFile(log.fileName)
+	fp := log.OpenCreateFile(log.fileName)
 	if fp != nil {
 		fmt.Fprintf(fp, "%s\n", messageInput)
     	fp.Close()
@@ -145,13 +145,13 @@ func (log *Log) createLog(messageInput string, messageType Message_Type) {
 
 	//Check logfile for rotaton
 	if err := log.logRotation(log.fileName); err != nil {
-		fmt.Println("Log Fatal error '%s'", string(err))
+		fmt.Printf("Log Fatal error '%v'", err)
 	}
 }
 
 /****************************************************************************************
  *
- * Function : Log::logRotation (Constructor)
+ * Function : Log::logRotation
  *
  *  Purpose : Rename current filename when file reached maxFileSize
  *
@@ -173,7 +173,7 @@ func (log *Log) logRotation(fileName string) error {
 	counter := 1
 	newFileName := ""
 	for {
-		newFileName = fileName + "." + string(counter)
+		newFileName = fileName + "." + fmt.Sprint(counter)
 
 	    if _, err := os.Stat(newFileName); err != nil {
 			if os.IsNotExist(err) {
@@ -190,9 +190,29 @@ func (log *Log) logRotation(fileName string) error {
 	}
 
 	// Rename current logfile to new
-	if errR := os.Rename(fileName, newFileName); errR != nil {
-		return errors.New(fmt.Sprintf("Cannot rename file '%s' to '%s' with error '%s'", fileName, newFileName, string(errR)))
+	if errRename := os.Rename(fileName, newFileName); errRename != nil {
+		return errors.New(fmt.Sprintf("Cannot rename file '%s' to '%s' with error '%s'", fileName, newFileName, errRename))
 	}
 
     return nil
+}
+
+/****************************************************************************************
+ *
+ * Function : Log::OpenCreateFile
+ *
+ *  Purpose : Open file and return file pointer to the log file to add message
+ *
+ *   Input : filename string - name of the current log file
+ *
+ *  Return : Return file pointer
+*/
+func (log *Log) OpenCreateFile(filename string) (*os.File) {
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		fmt.Printf("Error to open/create file '%s' , err: '%s'\n", filename, err)
+	    return nil
+	}
+
+	return f
 }
