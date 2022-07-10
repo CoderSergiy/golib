@@ -14,7 +14,6 @@ import (
 	"fmt"
 	"time"
 	"os"
-	"string"
 	"errors"
 )
 
