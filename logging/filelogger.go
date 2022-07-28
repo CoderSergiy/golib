@@ -11,34 +11,33 @@
 package logging
 
 import (
-	"fmt"
-	"time"
-	"os"
 	"errors"
+	"fmt"
+	"os"
+	"time"
 )
 
 type Message_Type string
 
 const (
-	Message_Error		Message_Type = "ERROR"
-	Message_Info		Message_Type = "INFO"
-	Message_Warning		Message_Type = "WARNING"
-	Message_Event		Message_Type = "EVENT"
+	Message_Error   Message_Type = "ERROR"
+	Message_Info    Message_Type = "INFO"
+	Message_Warning Message_Type = "WARNING"
+	Message_Event   Message_Type = "EVENT"
 
 	LOG_FILE_SIZE = 5000000
 )
 
-
 /****************************************************************************************
  *	Struct 	: Log
- * 
+ *
  * 	Purpose : Object handles the Log methods to create log file with rotation feature
  *
 *****************************************************************************************/
 type Log struct {
-	fileName 				string
-	fileSize				int64
-	duplicateOnTerminal		bool
+	fileName            string
+	fileSize            int64
+	duplicateOnTerminal bool
 }
 
 /****************************************************************************************
@@ -48,8 +47,8 @@ type Log struct {
  *  Purpose : Creates a new instance of the Log object
  *
  *	Return : Log object
-*/
-func LogConstructor (fileName string, outputDuplicateFlag bool, fileSize ...int64) Log {
+ */
+func LogConstructor(fileName string, outputDuplicateFlag bool, fileSize ...int64) Log {
 	log := Log{}
 	log.fileName = fileName
 	// Set default fileSize
@@ -75,8 +74,8 @@ func LogConstructor (fileName string, outputDuplicateFlag bool, fileSize ...int6
  *           a ...interface{} - data for the message
  *
  *  Return : Nothing
-*/
-func (log *Log) Info_Log (messageInput string, a ...interface{}) {
+ */
+func (log *Log) Info_Log(messageInput string, a ...interface{}) {
 	log.createLog(fmt.Sprintf(messageInput, a...), Message_Info)
 }
 
@@ -90,8 +89,8 @@ func (log *Log) Info_Log (messageInput string, a ...interface{}) {
  *           a ...interface{} - data for the message
  *
  *  Return : Nothing
-*/
-func (log *Log) Warning_Log (messageInput string, a ...interface{}) {
+ */
+func (log *Log) Warning_Log(messageInput string, a ...interface{}) {
 	log.createLog(fmt.Sprintf(messageInput, a...), Message_Warning)
 }
 
@@ -105,8 +104,8 @@ func (log *Log) Warning_Log (messageInput string, a ...interface{}) {
  *           a ...interface{} - data for the message
  *
  *  Return : Nothing
-*/
-func (log *Log) Error_Log (messageInput string, a ...interface{}) {
+ */
+func (log *Log) Error_Log(messageInput string, a ...interface{}) {
 	log.createLog(fmt.Sprintf(messageInput, a...), Message_Error)
 }
 
@@ -120,8 +119,8 @@ func (log *Log) Error_Log (messageInput string, a ...interface{}) {
  *           a ...interface{} - data for the message
  *
  *  Return : Nothing
-*/
-func (log *Log) Event_Log (messageInput string, a ...interface{}) {
+ */
+func (log *Log) Event_Log(messageInput string, a ...interface{}) {
 	log.createLog(fmt.Sprintf(messageInput, a...), Message_Event)
 }
 
@@ -135,7 +134,7 @@ func (log *Log) Event_Log (messageInput string, a ...interface{}) {
  *           messageType Message_Type - type of the message
  *
  *  Return : Nothing
-*/
+ */
 func (log *Log) createLog(messageInput string, messageType Message_Type) {
 	messageInput = time.Now().Format("2006-01-02 15:04:05.000") + " [" + string(messageType) + "] " + messageInput
 
@@ -143,7 +142,7 @@ func (log *Log) createLog(messageInput string, messageType Message_Type) {
 	fp := log.OpenCreateFile(log.fileName)
 	if fp != nil {
 		fmt.Fprintf(fp, "%s\n", messageInput)
-    	fp.Close()
+		fp.Close()
 	}
 
 	if log.duplicateOnTerminal {
@@ -163,15 +162,15 @@ func (log *Log) createLog(messageInput string, messageType Message_Type) {
  *  Purpose : Rename current filename when file reached maxFileSize
  *
  *  Return : Return error if cannot perform rotation, nil otherwise
-*/
+ */
 func (log *Log) logRotation(fileName string) error {
 	// Check if log file exist
 	stat, err := os.Stat(fileName)
-    if err != nil {
-       return err
-    }
+	if err != nil {
+		return err
+	}
 
-    // Check if log file size is ready to rotate
+	// Check if log file size is ready to rotate
 	if stat.Size() < LOG_FILE_SIZE {
 		return nil
 	}
@@ -182,12 +181,12 @@ func (log *Log) logRotation(fileName string) error {
 	for {
 		newFileName = fileName + "." + fmt.Sprint(counter)
 
-	    if _, err := os.Stat(newFileName); err != nil {
+		if _, err := os.Stat(newFileName); err != nil {
 			if os.IsNotExist(err) {
 				// Found correct new file name (not exists in the folder)
 				break
 			}
-	    }
+		}
 		counter++
 
 		if counter > 10000 {
@@ -201,7 +200,7 @@ func (log *Log) logRotation(fileName string) error {
 		return errors.New(fmt.Sprintf("Cannot rename file '%s' to '%s' with error '%s'", fileName, newFileName, errRename))
 	}
 
-    return nil
+	return nil
 }
 
 /****************************************************************************************
@@ -213,12 +212,12 @@ func (log *Log) logRotation(fileName string) error {
  *   Input : filename string - name of the current log file
  *
  *  Return : Return file pointer
-*/
-func (log *Log) OpenCreateFile(filename string) (*os.File) {
+ */
+func (log *Log) OpenCreateFile(filename string) *os.File {
 	f, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		fmt.Printf("Error to open/create file '%s' , err: '%s'\n", filename, err)
-	    return nil
+		return nil
 	}
 
 	return f

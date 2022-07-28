@@ -15,12 +15,12 @@ import (
 
 /****************************************************************************************
  *	Struct 	: EventTimer
- * 
+ *
  * 	Purpose : Object handles timer for the process
  *
 *****************************************************************************************/
 type EventTimer struct {
-	time		time.Time
+	time time.Time
 }
 
 /****************************************************************************************
@@ -30,7 +30,7 @@ type EventTimer struct {
  *  Purpose : Creates a new instance of the EventTimer object
  *
  *	Return : EventTimer object
-*/
+ */
 func EventTimerConstructor() EventTimer {
 	eventTimer := EventTimer{}
 	eventTimer.init()
@@ -46,8 +46,8 @@ func EventTimerConstructor() EventTimer {
  *   Input : Nothing
  *
  *  Return : Nothing
-*/
-func (eventTimer *EventTimer) init () {
+ */
+func (eventTimer *EventTimer) init() {
 	eventTimer.time = time.Now()
 }
 
@@ -60,15 +60,15 @@ func (eventTimer *EventTimer) init () {
  *   Input : Nothing
  *
  *  Return : Timer value in text format for logging
-*/
+ */
 func (eventTimer *EventTimer) PrintTimerString() string {
 	duration := time.Now().Sub(eventTimer.time)
-	if int (duration.Hours()) > 0 {
-		return fmt.Sprintf("%f hurs %f minutes %f seconds", duration.Hours(), duration.Minutes(), duration.Seconds())	
+	if int(duration.Hours()) > 0 {
+		return fmt.Sprintf("%f hurs %f minutes %f seconds", duration.Hours(), duration.Minutes(), duration.Seconds())
 	} else if int(duration.Minutes()) > 0 {
-		return fmt.Sprintf("%f minutes %f seconds", duration.Minutes(), duration.Seconds())	
+		return fmt.Sprintf("%f minutes %f seconds", duration.Minutes(), duration.Seconds())
 	} else if duration.Seconds() > 0 {
-		return fmt.Sprintf("%f seconds", duration.Seconds())	
+		return fmt.Sprintf("%f seconds", duration.Seconds())
 	}
 	return fmt.Sprintf("%d Nanoseconds", duration.Nanoseconds())
 }

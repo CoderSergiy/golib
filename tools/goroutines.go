@@ -24,7 +24,7 @@ import (
  *   Input : Nothing
  *
  *  Return : Return ID in int format
-*/
+ */
 func GetGoID() int {
 	var buf [64]byte
 	n := runtime.Stack(buf[:], false)

@@ -1,9 +1,8 @@
 package logging
 
 import (
-	"testing"
 	"fmt"
-//	"github.com/CoderSergiy/golib"
+	"testing"
 )
 
 /****************************************************************************************
@@ -13,14 +12,14 @@ import (
  *  Purpose : Method to test CallMessage struct as CentralSystem
  *
  *   Return : True when generated request and response is parsed correctly, false otherwise
-*/
-func TestLogStruct (t *testing.T ) {
+ */
+func TestLogStruct(t *testing.T) {
 
 	log := LogConstructor("/tmp/logs", false)
 
 	// Set max log file size by default
 	if log.fileSize != 5000000 {
-		t.Error (fmt.Printf("Wrong maxFileSize : '%v'", log.fileSize))
+		t.Error(fmt.Printf("Wrong maxFileSize : '%v'", log.fileSize))
 	} else {
 		t.Log(fmt.Printf("maxFileSize is correct '%v'", log.fileSize))
 	}
@@ -30,7 +29,7 @@ func TestLogStruct (t *testing.T ) {
 
 	// Check if max log filesize is not set by default and equal to set size in constructor
 	if log1.fileSize != 125000 {
-		t.Error (fmt.Printf("Wrong maxFileSize : '%v'", log1.fileSize))
+		t.Error(fmt.Printf("Wrong maxFileSize : '%v'", log1.fileSize))
 	} else {
 		t.Log(fmt.Printf("maxFileSize is correct '%v'", log1.fileSize))
 	}
@@ -39,6 +38,6 @@ func TestLogStruct (t *testing.T ) {
 	if log1.duplicateOnTerminal == duplicateOnTerminal {
 		t.Log(fmt.Printf("duplicateOnTerminal flag is set correctly: '%v'", duplicateOnTerminal))
 	} else {
-		t.Error (fmt.Printf("Wrong duplicateOnTerminal flag: '%v'", duplicateOnTerminal))
+		t.Error(fmt.Printf("Wrong duplicateOnTerminal flag: '%v'", duplicateOnTerminal))
 	}
 }
