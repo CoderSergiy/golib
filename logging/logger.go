@@ -1,3 +1,12 @@
+/*	==========================================================================
+	Golib Repo
+	Filename: logger.go
+	Owner: Sergiy Safronov
+	Source : github.com/CoderSergiy/golib/tools
+	Purpose: Methods to generate loging line for the logger
+	=============================================================================
+*/
+
 package logging
 
 import (
@@ -6,32 +15,32 @@ import (
 )
 
 type LogInitInterface interface {
-	LogInit (filename string)
+	LogInit(filename string)
 
-	Info_Log (messageInput string)
-	Warning_Log (messageInput string)
-	Error_Log (messageInput string)
+	Info_Log(messageInput string)
+	Warning_Log(messageInput string)
+	Error_Log(messageInput string)
 }
 
-func Info_Log (messageInput string, a ...interface{}) {
+func Info_Log(messageInput string, a ...interface{}) {
 	messageInput = fmt.Sprintf(messageInput, a...)
 	messageInput = "[" + time.Now().Format("2006-01-02 15:04:05.000") + "][INFO] " + messageInput
 	fmt.Println(messageInput)
 }
 
-func Warning_Log (messageInput string, a ...interface{}) {
+func Warning_Log(messageInput string, a ...interface{}) {
 	messageInput = fmt.Sprintf(messageInput, a...)
 	messageInput = "[" + time.Now().Format("2006-01-02 15:04:05.000") + "][WARNING] " + messageInput
 	fmt.Println(messageInput)
 }
 
-func Error_Log (messageInput string, a ...interface{}) {
+func Error_Log(messageInput string, a ...interface{}) {
 	messageInput = fmt.Sprintf(messageInput, a...)
 	messageInput = "[" + time.Now().Format("2006-01-02 15:04:05.000") + "][ERROR] " + messageInput
 	fmt.Println(messageInput)
 }
 
-func Event_Log (messageInput string, a ...interface{}) {
+func Event_Log(messageInput string, a ...interface{}) {
 	messageInput = fmt.Sprintf(messageInput, a...)
 	messageInput = "[" + time.Now().Format("2006-01-02 15:04:05.000") + "][EVENT] " + messageInput
 	fmt.Println(messageInput)

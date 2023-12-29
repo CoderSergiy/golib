@@ -1,3 +1,12 @@
+/*	==========================================================================
+	Golib Repo
+	Filename: filelib.go
+	Owner: Sergiy Safronov
+	Source : github.com/CoderSergiy/golib/tools
+	Purpose: Methods to work with files
+	=============================================================================
+*/
+
 package file
 
 import "fmt"
@@ -70,4 +79,15 @@ func OpenCreateFile(filename string) (*os.File) {
 	}()
 
 	return f
+}
+
+func IsFolderExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }

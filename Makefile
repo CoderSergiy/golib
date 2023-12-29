@@ -32,16 +32,14 @@ define docker-run =
 	docker run --rm \
 		--name toolbox-golib-tests \
 		-v ${PROJECT_PATH}:/go/golib \
-		-v ${PROJECT_PATH}/logs:/tmp/logs \
-		-p "9033:8080" \
 		${IMAGE_NAME}:${VERSION} \
 		$(1)
 endef
 
 fmts:
-	$(GOFMT) -s -d ./timelib/*.go
-	$(GOFMT) -s -d ./logging/*.go
-	$(GOFMT) -s -d ./tools/*.go
+	$(GOFMT) -w -s -d ./timelib/*.go
+	$(GOFMT) -w -s -d ./logging/*.go
+	$(GOFMT) -w -s -d ./tools/*.go
 
 test:
 	@CGO_ENABLED=0 $(GOTEST) -v ./...
